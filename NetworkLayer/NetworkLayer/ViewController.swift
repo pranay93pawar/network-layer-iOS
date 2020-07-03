@@ -10,9 +10,18 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var networkManager: NetworkManager! = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        networkManager.getNewMovies(page: 1) { (movies, error) in
+            
+            print(movies)
+            print(error)
+            
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {

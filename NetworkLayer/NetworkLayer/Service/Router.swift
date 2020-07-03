@@ -46,14 +46,24 @@ class Router<EndPoint: EndPointType>: NetworkRouter {
             switch route.task {
             case .request:
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            case .requestParameters(let bodyParameters, let urlParameters):
                 
-                try self.configureParameters(bodyParameters: bodyParameters,urlParameters: urlParameters,request: &request)
+            case .requestParameters(let bodyParameters,
+                                    let urlParameters):
                 
-            case .requestParametersAndHeaders(let bodyParameters, let urlParameters, let additionalHeaders) :
+                try self.configureParameters(bodyParameters: bodyParameters,
+                                             urlParameters: urlParameters,
+                                             request: &request)
                 
-                self.addAdditionalHeaders(additionalHeaders, request: &request)
-                try self.configureParameters(bodyParameters: bodyParameters,urlParameters: urlParameters,request: &request)
+            case .requestParametersAndHeaders(let bodyParameters,
+                                              let urlParameters,
+                                              let additionalHeaders) :
+                
+                self.addAdditionalHeaders(additionalHeaders,
+                                          request: &request)
+                
+                try self.configureParameters(bodyParameters: bodyParameters,
+                                             urlParameters: urlParameters,
+                                             request: &request)
             }
             
             return request
@@ -70,11 +80,11 @@ class Router<EndPoint: EndPointType>: NetworkRouter {
         do {
             
             if let bodyParameters = bodyParameters {
-                try JSONParamterEncoder.encode(urlRequest: &request, with: bodyParameters)
+                try JSONParameterEncoder.encode(urlRequest: &request, with: bodyParameters)
             }
             
             if let urlParameters = urlParameters {
-                try JSONParamterEncoder.encode(urlRequest: &request, with: urlParameters)
+                try URLParameterEncoder.encode(urlRequest: &request, with: urlParameters)
             }
             
         } catch  {
